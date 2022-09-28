@@ -1,0 +1,9 @@
+{
+	"name": "MALLI3110",
+	"location": "centralindia",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "04dba014-5e18-4003-b1bf-dd65413c0324",
+		"tenantId": "44d8d2ab-0d25-4cba-8392-a4a8f82e275b"
+	}
+}
