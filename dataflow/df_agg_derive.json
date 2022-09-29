@@ -14,7 +14,11 @@
 				}
 			],
 			"sinks": [],
-			"transformations": [],
+			"transformations": [
+				{
+					"name": "derivedColumn1"
+				}
+			],
 			"scriptLines": [
 				"source(output(",
 				"          movieId as string,",
@@ -23,7 +27,9 @@
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> moviesV1"
+				"     ignoreNoFilesFound: false) ~> moviesV1",
+				"moviesV1 derive(year = toInteger(trim(right(title,6),'()')),",
+				"          title = toString(left(title,length(title)-6))) ~> derivedColumn1"
 			]
 		}
 	}
