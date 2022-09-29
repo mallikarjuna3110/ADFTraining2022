@@ -1,0 +1,30 @@
+{
+	"name": "df_agg_derive",
+	"properties": {
+		"description": "data flow is create to learn aggeregate activity",
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "MOVIES_DS1",
+						"type": "DatasetReference"
+					},
+					"name": "moviesV1"
+				}
+			],
+			"sinks": [],
+			"transformations": [],
+			"scriptLines": [
+				"source(output(",
+				"          movieId as string,",
+				"          title as string,",
+				"          genres as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> moviesV1"
+			]
+		}
+	}
+}
