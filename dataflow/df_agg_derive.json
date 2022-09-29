@@ -13,7 +13,19 @@
 					"name": "moviesV1"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "MOVIESOPCSV",
+						"type": "DatasetReference"
+					},
+					"name": "moviesclean",
+					"rejectedDataLinkedService": {
+						"referenceName": "ls_blob_training229",
+						"type": "LinkedServiceReference"
+					}
+				}
+			],
 			"transformations": [
 				{
 					"name": "derivedColumn1"
@@ -29,7 +41,14 @@
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> moviesV1",
 				"moviesV1 derive(year = toInteger(trim(right(title,6),'()')),",
-				"          title = toString(left(title,length(title)-6))) ~> derivedColumn1"
+				"          title = toString(left(title,length(title)-6))) ~> derivedColumn1",
+				"derivedColumn1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['moviesclean.csv'],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     outputAssertFailedRows: true,",
+				"     partitionBy('hash', 1)) ~> moviesclean"
 			]
 		}
 	}
