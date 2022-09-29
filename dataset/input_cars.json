@@ -1,5 +1,5 @@
 {
-	"name": "cars",
+	"name": "input_cars",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_blob_training229",
@@ -16,6 +16,7 @@
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
 			"firstRowAsHeader": true,
+			"nullValue": "training",
 			"quoteChar": "\""
 		},
 		"schema": [
