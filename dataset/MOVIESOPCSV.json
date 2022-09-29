@@ -1,0 +1,20 @@
+{
+	"name": "MOVIESOPCSV",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_blob_training229",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
