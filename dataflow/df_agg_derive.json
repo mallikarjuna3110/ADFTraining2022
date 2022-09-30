@@ -20,11 +20,21 @@
 						"type": "DatasetReference"
 					},
 					"name": "moviesclean"
+				},
+				{
+					"dataset": {
+						"referenceName": "MOVIESOPCSV",
+						"type": "DatasetReference"
+					},
+					"name": "moviescountbyyear"
 				}
 			],
 			"transformations": [
 				{
-					"name": "derivedColumn1"
+					"name": "extractyeartitle"
+				},
+				{
+					"name": "RatingByYear"
 				}
 			],
 			"scriptLines": [
@@ -37,13 +47,21 @@
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> moviesV1",
 				"moviesV1 derive(Year = toInteger(trim(right(title,6),'()')),",
-				"          title = toString(left(title,length(title)-6))) ~> derivedColumn1",
-				"derivedColumn1 sink(allowSchemaDrift: true,",
+				"          title = toString(left(title,length(title)-6))) ~> extractyeartitle",
+				"extractyeartitle aggregate(groupBy(Year),",
+				"     MoviesCount = count(Year)) ~> RatingByYear",
+				"extractyeartitle sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     partitionFileNames:['movieclean.csv'],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     partitionBy('hash', 1)) ~> moviesclean"
+				"     partitionBy('hash', 1)) ~> moviesclean",
+				"RatingByYear sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['moviecountbyyear'],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> moviescountbyyear"
 			]
 		}
 	}
