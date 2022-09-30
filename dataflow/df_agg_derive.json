@@ -1,0 +1,50 @@
+{
+	"name": "df_agg_derive",
+	"properties": {
+		"description": "dataflow is create to learn aggregate and derive activity",
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "MOVIES_DS1",
+						"type": "DatasetReference"
+					},
+					"name": "moviesV1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "MOVIESOPCSV",
+						"type": "DatasetReference"
+					},
+					"name": "moviesclean"
+				}
+			],
+			"transformations": [
+				{
+					"name": "derivedColumn1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          movieId as string,",
+				"          title as string,",
+				"          genres as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> moviesV1",
+				"moviesV1 derive(Year = toInteger(trim(right(title,6),'()')),",
+				"          title = toString(left(title,length(title)-6))) ~> derivedColumn1",
+				"derivedColumn1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['movieclean.csv'],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> moviesclean"
+			]
+		}
+	}
+}
