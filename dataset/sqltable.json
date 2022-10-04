@@ -1,0 +1,20 @@
+{
+	"name": "sqltable",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_sql_edw",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"table_name": {
+				"type": "string"
+			},
+			"schemaname": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": []
+	}
+}
