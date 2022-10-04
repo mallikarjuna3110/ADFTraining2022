@@ -1,0 +1,21 @@
+{
+	"name": "Genericcsv",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_blob_training229",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"container": "output"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
