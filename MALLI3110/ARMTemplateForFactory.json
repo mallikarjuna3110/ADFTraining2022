@@ -346,10 +346,12 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobStorageLocation",
+						"fileName": "@dataset().filename",
 						"container": "output"
 					},
 					"columnDelimiter": ",",
 					"escapeChar": "\\",
+					"firstRowAsHeader": true,
 					"quoteChar": "\""
 				},
 				"schema": []
@@ -563,7 +565,10 @@
 						"precision": 10
 					}
 				],
-				"typeProperties": {}
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "Cars"
+				}
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/ls_sql_edw')]"
@@ -590,8 +595,8 @@
 				"type": "AzureSqlTable",
 				"schema": [],
 				"typeProperties": {
-					"schema": "dbo",
-					"table": "Cars"
+					"schema": "@dataset().schemaname",
+					"table": "@dataset().table_name"
 				}
 			},
 			"dependsOn": [
