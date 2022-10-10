@@ -19,7 +19,15 @@
 					"name": "dimcstomer"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DimCostmer",
+						"type": "DatasetReference"
+					},
+					"name": "sinktarget"
+				}
+			],
 			"transformations": [
 				{
 					"name": "createhashkey"
@@ -32,6 +40,9 @@
 				},
 				{
 					"name": "SetDates"
+				},
+				{
+					"name": "Upsert"
 				}
 			],
 			"scriptLines": [
@@ -79,7 +90,33 @@
 				"     pickup: 'any',",
 				"     broadcast: 'auto')~> lookupcustomerid",
 				"lookupcustomerid derive(InsertedDate = iif(isNull(InsertedDate), currentTimestamp(), InsertedDate),",
-				"          ModifiedDate = currentTimestamp()) ~> SetDates"
+				"          ModifiedDate = currentTimestamp()) ~> SetDates",
+				"SetDates alterRow(upsertIf(true())) ~> Upsert",
+				"Upsert sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          CustomerID as integer,",
+				"          Title as string,",
+				"          FirstName as string,",
+				"          MiddleName as string,",
+				"          LastName as string,",
+				"          Suffix as string,",
+				"          CompanyName as string,",
+				"          SalesPerson as string,",
+				"          EmailAddress as string,",
+				"          Phone as string,",
+				"          InsertedDate as timestamp,",
+				"          ModifiedDate as timestamp,",
+				"          HashKey as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sinktarget"
 			]
 		}
 	}
