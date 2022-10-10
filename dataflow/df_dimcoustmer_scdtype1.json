@@ -26,6 +26,12 @@
 				},
 				{
 					"name": "Exist"
+				},
+				{
+					"name": "lookupcustomerid"
+				},
+				{
+					"name": "SetDates"
 				}
 			],
 			"scriptLines": [
@@ -67,7 +73,13 @@
 				"customersource derive(Hashkey = sha2(256, iifNull(Title,'') +FirstName +iifNull(MiddleName,'') +iifNull(LastName,'') +iifNull(Suffix,'') +iifNull(CompanyName,'') +iifNull(SalesPerson,'') +iifNull(EmailAddress,'') +iifNull(Phone,''))) ~> createhashkey",
 				"createhashkey, dimcstomer exists(createhashkey@Hashkey == dimcstomer@HashKey,",
 				"     negate:true,",
-				"     broadcast: 'auto')~> Exist"
+				"     broadcast: 'auto')~> Exist",
+				"Exist, dimcstomer lookup(customersource@CustomerID == dimcstomer@CustomerID,",
+				"     multiple: false,",
+				"     pickup: 'any',",
+				"     broadcast: 'auto')~> lookupcustomerid",
+				"lookupcustomerid derive(InsertedDate = iif(isNull(InsertedDate), currentTimestamp(), InsertedDate),",
+				"          ModifiedDate = currentTimestamp()) ~> SetDates"
 			]
 		}
 	}
