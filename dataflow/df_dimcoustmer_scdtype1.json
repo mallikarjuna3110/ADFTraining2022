@@ -23,6 +23,9 @@
 			"transformations": [
 				{
 					"name": "createhashkey"
+				},
+				{
+					"name": "Exist"
 				}
 			],
 			"scriptLines": [
@@ -61,7 +64,10 @@
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
 				"     format: 'table') ~> dimcstomer",
-				"customersource derive(Hashkey = sha2(256, iifNull(Title,'') +FirstName +iifNull(MiddleName,'') +iifNull(LastName,'') +iifNull(Suffix,'') +iifNull(CompanyName,'') +iifNull(SalesPerson,'') +iifNull(EmailAddress,'') +iifNull(Phone,''))) ~> createhashkey"
+				"customersource derive(Hashkey = sha2(256, iifNull(Title,'') +FirstName +iifNull(MiddleName,'') +iifNull(LastName,'') +iifNull(Suffix,'') +iifNull(CompanyName,'') +iifNull(SalesPerson,'') +iifNull(EmailAddress,'') +iifNull(Phone,''))) ~> createhashkey",
+				"createhashkey, dimcstomer exists(createhashkey@Hashkey == dimcstomer@HashKey,",
+				"     negate:true,",
+				"     broadcast: 'auto')~> Exist"
 			]
 		}
 	}
